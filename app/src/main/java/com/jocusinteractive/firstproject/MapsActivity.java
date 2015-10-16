@@ -10,6 +10,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -72,9 +73,51 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             for(Location location: mainPage.listOfLocations){ //add each point from list as marker on map
 
                 LatLng loc = new LatLng((LATITUDE + location.getLatLng().first),(LONGITUDE + location.getLatLng().second));
-                Marker marker = mMap.addMarker(new MarkerOptions()
-                                                .position(loc)
-                                                .title(location.getName()));
+                String color = location.getColor();
+                Marker marker;
+
+                BitmapDescriptorFactory bdf;
+                switch (color) {
+                    case "#3333FF":
+                        marker = mMap.addMarker(new MarkerOptions()
+                                .position(loc)
+                                .title(location.getName())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+                        break;
+                    case "#33CC00":
+                        marker = mMap.addMarker(new MarkerOptions()
+                                .position(loc)
+                                .title(location.getName())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                        break;
+                    case "#FF9900":
+                        marker = mMap.addMarker(new MarkerOptions()
+                                .position(loc)
+                                .title(location.getName())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+                        break;
+                    case "#FF0033":
+                        marker = mMap.addMarker(new MarkerOptions()
+                                .position(loc)
+                                .title(location.getName())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                        break;
+                    case "#CCCCCC":
+                        marker = mMap.addMarker(new MarkerOptions()
+                                .position(loc)
+                                .title(location.getName())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+                        break;
+                    default:
+                        marker = mMap.addMarker(new MarkerOptions()
+                                .position(loc)
+                                .title(location.getName())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)));
+                        break;
+                }
+
+
+
                 listOfMarkers.add(marker);
             }
         }

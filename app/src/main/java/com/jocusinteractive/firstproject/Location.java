@@ -14,13 +14,16 @@ public class Location{
     private Double x;
     private Double y;
     private Double z;
+    private String color;
 
 
-    public Location (String name, Double x, Double y, Double z){
+
+    public Location (String name, Double x, Double y, Double z, String color){
         this.name = name;
         this.x = x;
         this.y = y;
         this.z = z;
+        this.color =color;
     }
 
     public Double getX() {
@@ -41,6 +44,14 @@ public class Location{
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String name) {
+        this.color = name;
     }
 
     public void setX(Double x) {

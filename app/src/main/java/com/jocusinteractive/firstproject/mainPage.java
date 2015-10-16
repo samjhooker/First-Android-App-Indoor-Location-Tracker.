@@ -183,7 +183,7 @@ public class mainPage extends AppCompatActivity {
                     JSONObject tag = (JSONObject)listOfTags.get(i);
 
                     String name = tag.getString("name");
-
+                    String color = tag.getString("color");
 
                     JSONArray listOfCo = tag.getJSONArray("position");
 
@@ -193,7 +193,9 @@ public class mainPage extends AppCompatActivity {
 
 
 
-                    Location location = new Location(name, x, y, z);
+
+
+                    Location location = new Location(name, x, y, z, color);
                     listOfLocations.add(location);
 
 
