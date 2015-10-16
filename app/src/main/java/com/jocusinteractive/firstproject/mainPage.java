@@ -1,6 +1,7 @@
 package com.jocusinteractive.firstproject;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -14,15 +15,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 
-import org.json.JSONException;
 import org.json.*;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 
@@ -37,6 +39,8 @@ public class mainPage extends AppCompatActivity {
     private ListView listView;
     public static ArrayList<Location> listOfLocations= new ArrayList<>();
     private TableViewAdapter adapter;
+    static String json;
+    static View theView;
 
 
     @Override
@@ -96,34 +100,87 @@ public class mainPage extends AppCompatActivity {
     }
 
 
+    private static class getRestAPI extends AsyncTask<Void, Void, Void>{
+
+        static String jsonStr;
+        String data = "";
 
 
-    private void getButtonPressed(View view) throws Exception{
-
-        Snackbar.make(view, "ButtonPressed", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
-        String urlStr = "http://192.168.10.40:8080/qpe/getTagPosition?version=2&humanReadable=true&maxAge=5000";
-
-        try {
+        @Override
+        protected Void doInBackground(Void... params) {
+            BufferedReader br = null;
 
 
+            try {
+
+
+                URL url;
+
+                String urlStr = "http://192.168.10.40:8080/qpe/getTagPosition?version=2&humanReadable=true&maxAge=5000";
+
+                url = new URL(urlStr);
 
 
 
 
+                URLConnection connection = url.openConnection();
+                connection.setDoOutput(true);
+
+                OutputStreamWriter outputStreamWr = new OutputStreamWriter(connection.getOutputStream());
+                outputStreamWr.write(data);
+                outputStreamWr.flush();
 
 
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            Snackbar.make(view, "Json Failed", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
+                br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                StringBuilder sb = new StringBuilder();
+                String line = null;
 
+                while((line = br.readLine())!=null) {
+                    sb.append(line);
+                    sb.append(System.getProperty("line.separator"));
+                }
+
+                jsonStr = sb.toString();
+
+
+            } catch (Exception e){
+                //Really dont care
+            }
+            return null;
 
         }
 
 
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            json = jsonStr;
+            loadApiData();
+        }
     }
+
+
+
+
+
+    static void loadApiData(){
+        Snackbar.make(theView, json, Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
+
+    }
+
+    private void getButtonPressed(View view) throws Exception{
+
+        Snackbar.make(view, "Gone Going Getting Locations", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
+        theView = view;
+
+        new getRestAPI().execute();
+
+
+    }
+
 
     private void mapButtonPressed(View view){
         if(listOfLocations.size() == 0){
