@@ -34,11 +34,11 @@ import java.net.URL;
 public class mainPage extends AppCompatActivity {
 
 
-    private TextView label;
+    static TextView label;
     private Button button;
     private ListView listView;
     public static ArrayList<Location> listOfLocations= new ArrayList<>();
-    private TableViewAdapter adapter;
+    static TableViewAdapter adapter;
     static String json;
     static View theView;
 
@@ -71,9 +71,9 @@ public class mainPage extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try{
+                try {
                     getButtonPressed(view);
-                }catch (Exception e){
+                } catch (Exception e) {
                     //I dont care
                 }
 
@@ -86,12 +86,7 @@ public class mainPage extends AppCompatActivity {
 
         //creating some test objects
 
-        listOfLocations.add(new Location("house", 0.0, 0.0, 0.0));
-        listOfLocations.add(new Location("work", 53.0, 16.0, 12.0));
-        listOfLocations.add(new Location("park", 19.0, 64.0, 10.0));
-        listOfLocations.add(new Location("Zoo?", -5.0, -10.0, 12.0));
 
-        adapter.addAll(listOfLocations);
         updateNumberOfItemsLabel();
 
 
@@ -116,7 +111,7 @@ public class mainPage extends AppCompatActivity {
 
                 URL url;
 
-                String urlStr = "http://192.168.10.40:8080/qpe/getTagPosition?version=2&humanReadable=true&maxAge=5000";
+                String urlStr = "http://192.168.10.40:8080/qpe/getTagPosition?version=2&humanReadable=true";
 
                 url = new URL(urlStr);
 
@@ -161,12 +156,79 @@ public class mainPage extends AppCompatActivity {
     }
 
 
+    static void updateList(){
+        adapter.addAll(listOfLocations);
+        updateNumberOfItemsLabel();
+    }
 
 
 
-    static void loadApiData(){
-        Snackbar.make(theView, json, Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
+     static void loadApiData(){
+        try{
+            listOfLocations.clear();
+
+
+            JSONObject obj = new JSONObject(json);
+
+            String done = obj.getString("status");
+
+            if (done.equals("Ok")){
+
+                JSONArray listOfTags = obj.getJSONArray("tags");
+
+                for (int i = 0; i < listOfTags.length(); i++){
+
+
+
+                    JSONObject tag = (JSONObject)listOfTags.get(i);
+
+                    String name = tag.getString("name");
+
+
+                    JSONArray listOfCo = tag.getJSONArray("position");
+
+                    Double x = (Double)listOfCo.get(0);
+                    Double y = (Double)listOfCo.get(1);
+                    Double z = (Double)listOfCo.get(2);
+
+
+
+                    Location location = new Location(name, x, y, z);
+                    listOfLocations.add(location);
+
+
+
+
+
+                }
+
+                updateList();
+
+
+
+
+
+
+            }else{
+                Snackbar.make(theView, "Something went got broke :(", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+
+            }
+
+
+
+
+
+        }catch (Exception e){
+            //handle it later
+        }
+
+
+
+
+
+
+
 
     }
 
@@ -197,7 +259,7 @@ public class mainPage extends AppCompatActivity {
     }
 
 
-    private void updateNumberOfItemsLabel(){
+    static void updateNumberOfItemsLabel(){
         label.setText(listOfLocations.size() + " locations gone get got");
     }
 

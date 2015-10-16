@@ -69,7 +69,7 @@ public class Location{
     }
 
     public String getDescription(){
-        String string =  "x:"+x+" y:" + y+ " z:" +z;
+        String string =  "x:"+x+"    y:" + y+ "   g z:" +z;
         return string;
     }
 
