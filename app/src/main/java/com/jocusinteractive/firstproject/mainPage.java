@@ -34,6 +34,9 @@ import java.net.URL;
 public class mainPage extends AppCompatActivity {
 
 
+    //MODIFY THIS URL FOR YOUR OWN PURPOSE.
+    static String userUrl = "http://175.111.102.162:8080/qpe/getTagPosition?version=2&humanReadable=true";
+
     static TextView label;
     private Button button;
     private ListView listView;
@@ -111,7 +114,7 @@ public class mainPage extends AppCompatActivity {
 
                 URL url;
 
-                String urlStr = "http://192.168.10.40:8080/qpe/getTagPosition?version=2&humanReadable=true";
+                String urlStr = userUrl;
 
                 url = new URL(urlStr);
 

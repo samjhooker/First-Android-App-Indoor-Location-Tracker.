@@ -22,8 +22,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     private FloatingActionButton backButton;
-    private Double LATITUDE = -43.473739;
-    private Double LONGITUDE = 172.609034;
+
+
+    /*
+    CHANGE THESE LAT AND LNG TO BE THE LOCATION OF BASES
+     */
+    private Double LATITUDE = -43.473789;
+    private Double LONGITUDE = 172.609054;
+    //altitude is 13 meters, but i dont care.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
